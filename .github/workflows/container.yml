@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v2 # checkout the current code the github virtual machine
       - run: yarn install
       - run: yarn build
-      - uses: actions/aws/cli@master
+      - uses: aws-actions/setup-sam@v2
       - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
