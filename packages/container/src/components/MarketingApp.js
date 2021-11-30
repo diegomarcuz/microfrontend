@@ -3,13 +3,13 @@ import {mount} from 'marketing/MarketingIndex'
  
 export const MarketingApp = () =>{
 
-  const markentingRef = useRef()
+  const marketingRef = useRef()
 
   useEffect(()=>{
 
-    mount(markentingRef.current)
+    mount(marketingRef.current)
   }, [])
 
-  return <div ref={markentingRef} />
+  return <div ref={marketingRef} />
 
 }
