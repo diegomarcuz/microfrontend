@@ -6,12 +6,10 @@ on:
       - master
     # paths:
     #   - 'packages/container/**'
-   
 
 defaults:
-  run: 
+  run:
     working-directory: packages/container
-
 
 jobs:
   build:
@@ -20,11 +18,11 @@ jobs:
       - uses: actions/checkout@master # checkout the current code to github virtual machine
       - run: yarn install
       - run: yarn build
-      - uses: shallwefootball/s3-upload-action@master
-        with: 
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_bucket: ${{ secrets.AWS_S3_BUCKET_NAME }}
-          source_dir: 'dist'
-          destination_dir: '/container/latest'
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Deploy
+        run: aws S3 sync /.dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest --delete
 # - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
