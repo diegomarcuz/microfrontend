@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: packages/container
+    working-directory: packages/container # commands are relative to this working directory
 
 jobs:
   build:
@@ -25,5 +25,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy
-        run: aws S3 sync /.dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest --delete
+        run: aws s3 sync /.dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest --delete
 # - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
