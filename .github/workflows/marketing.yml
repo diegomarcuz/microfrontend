@@ -1,15 +1,15 @@
-name: deploy-container
+name: deploy-marketing
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'packages/container/**'
+      - 'packages/marketing/**'
 
 defaults:
   run:
-    working-directory: packages/container # commands are relative to this working directory
+    working-directory: packages/marketing # commands are relative to this working directory
 
 jobs:
   build:
@@ -18,8 +18,6 @@ jobs:
       - uses: actions/checkout@master # checkout the current code to github virtual machine
       - run: yarn install
       - run: yarn build
-        env: 
-          PRODUCTION_DOMAIN: ${{ secrets.PRODUCTION_DOMAIN }}
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -27,8 +25,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy
-        run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest --delete
+        run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/marketing/latest --delete
       - name: Invalidation
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/container/latest/index.html"
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/container/latest/remoteEntry.js"
         
 # - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
